@@ -1,0 +1,16 @@
+[flake8]
+
+max-line-length = 150
+exclude =   ./logs/,
+            ./model/__init__.py,
+            ./model/*.pickle,
+            ./reports/,
+            ./test_folder/
+            ./*.ipynb,
+            ./__pycache__/
+            ./*/__pycache__/
+            ./*/*/__pycache__/
+            ./.ipynb_checkpoints
+            ./*/.ipynb_checkpoints
+            ./*/*..ipynb_checkpoints
+            ./ailiver/alembic/*

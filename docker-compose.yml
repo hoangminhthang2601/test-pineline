@@ -1,0 +1,42 @@
+version: '3.9'
+services:
+  app:
+    build:
+      context: .
+      args:
+        - DEV=true
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./src/:/app/"
+      - "./tests/:/app/tests/"
+    command: >
+      sh -c "
+        flake8 && \
+        coverage run -m pytest tests/ && \
+        coverage report && \
+        uvicorn ailiver.main:app --reload --port 8000 --host 0.0.0.0
+      "
+    environment:
+      - PYTHONPATH=.
+      - DB_HOST=db
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASSWORD=password
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15.5-alpine3.18
+    volumes:
+      - dev-db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: devdb
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: password
+      PGDATA: /var/lib/postgresql/data/pgdata
+
+volumes:
+  dev-db-data:
